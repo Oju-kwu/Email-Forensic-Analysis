@@ -58,7 +58,7 @@ Moscow, Russia, with the IP address 103.225.77.255.
  
 ![image](https://github.com/user-attachments/assets/a22d0528-df8b-4ff8-97f9-284abb1f571d)
                 
-*Image by phishtool*
+*Image from phishtool*
 
  Email MetaData Overview
 
@@ -82,14 +82,14 @@ Domain lookup was performed to gain additional information about the originating
  
 ![image](https://github.com/user-attachments/assets/44fbd720-b1cf-479f-bbc6-a44b1e293726)
 
- *whois lookup by VirusTotal*
+ *whois lookup from VirusTotal*
 
 # Received Header Chain:
 Below is the list of all servers (received headers) in order from origin to destination:
  
  ![image](https://github.com/user-attachments/assets/c82f02ca-c3c4-446c-bc5d-8f140651d3cf)
 
-*Image by Phishtool*
+*Image from Phishtool*
 
 Total hops = 4
 Any anomalies? The message originated from a suspicious IP address in Germany and lacked SPF authorization. Additionally, the hostnames were spoofed or forged to resemble Outlook servers.
@@ -121,3 +121,55 @@ DMARC builds on SPF and DKIM. It tells the receiving email server what to do wit
 |---------------------------|----------------------------|------------------|
 |   X-MS-Exchange-Organization-AuthAs |  Anonymous |  Message was unauthenticated on arrival|
 | X-MS-Exchange-Organization-AuthSource | MW2NAM04FT048.eop-NAM04.prod.protection.outlook.com|  The message appeared to arrive via Outlook infrastructure, likely forged or relayed.|
+
+The X-MS-Exchange-Organization-AuthAs header indicates how the sender was authenticated when submitting the email to Exchange. In this case, the "Anonymous" value signifies that the email wasn't authenticated, raising a red flag for potential spoofing or phishing, especially when combined with the failure of SPF, DKIM, and DMARC checks. Although the email seemingly entered through Outlook infrastructure (MW2NAM04FT048.eop-NAM04.prod.protection.outlook.com), this could be misleading, as it might have been forged or relayed through an external connector.
+
+## Sender and Domain Validation
+Stated sender = no-reply@access-accsecurity[.]com
+Reply-To=solutionteamrecognizd03@gmail[.]com
+The email's sender domain, access-accsecurity[.]com, doesn't match Microsoft's, and it's not a recognized Microsoft domain, which raises suspicions. Additionally, the use of a free Gmail address for replies in a supposed "Microsoft" security alert is a major warning sign, further indicating the email's fraudulent nature.
+
+Below are the A records and MX records for Microsoft. The domain access-accsecurity[.]com was examined and compared against Microsoft's official records. This involved checking both A records, which map domain names to IP addresses, and MX records, which specify the mail servers responsible for handling a domain's email.
+
+The results of this lookup showed that access-accsecurity[.]com was not present in Microsoft's A records. This mismatch indicates that the email claiming to be from Microsoft was not actually sent from a legitimate Microsoft domain, adding further evidence to its fraudulent nature.
+
+![image](https://github.com/user-attachments/assets/71f945c4-5041-4e76-82cb-6154d1e173b9)
+
+*Records for outlook.com(by MXtoolbox)*
+
+![image](https://github.com/user-attachments/assets/fb3e51e1-f912-473f-bcc8-32f574896422)
+
+*“MX” records,outlook.com(by MXtoolbox)*
+
+## Timestamp & Delivery Path Analysis
+![image](https://github.com/user-attachments/assets/70b267e9-f8f5-4795-829d-d7ee1a425ce6)
+
+*Image from  phishtool*
+
+The analysis of the email headers reveals inconsistencies in the timestamps, which are either too close together or show discrepancies. This strongly suggests that the delivery time was manipulated, especially considering the email's path. Despite originating from a suspicious IP address, the headers indicate that the email was forwarded through multiple Microsoft servers, which is unusual and further points to potential tampering to mask the email's true origin and deceive the recipient.
+
+# Extracted URL and Domain
+# URL:
+The analysis revealed an embedded tracking pixel in the email. Below is the image:
+![image](https://github.com/user-attachments/assets/355c0524-dfd3-42eb-a6a2-f548c27fa82a)
+
+*Image from EML Analyzer*
+
+What is this?
+This is a *1x1 invisible image*, commonly known as a: Tracking Pixel (aka web beacon or spy pixel).
+The purpose of these tracking pixels is typically used in marketing emails, phishing attempts, or malicious campaigns to:
+● Detect when and if an email was opened
+● Log the recipient’s IP address
+● Capture User-Agent / browser info
+● Track recipient location (rough geolocation via IP)
+● Fingerprint the user for further tracking  
+
+# Dissecting the Code:
+# hxxp[://]thebandalisty[.]com/track/o41799GCMXp22448528DkRM49413Hwr34421lnRD176
+This URL is the endpoint being hit when the email is opened. When your email client loads images (automatically or manually), it contacts that server, logging your interaction.
+# width="1px" height="1px"
+Makes it tiny and unnoticeable
+# style="visibility:hidden"
+Ensures it’s not visible even if the dimensions weren’t enough
+
+The URL was subsequently searched on VirusTotal to gain further insight. The results, as shown below, indicate that four vendors have flagged the URL as malicious.
