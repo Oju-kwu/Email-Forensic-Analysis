@@ -68,14 +68,29 @@ Moscow, Russia, with the IP address 103.225.77.255.
 |Subject  |Microsoft account unusual sign in activity |
 |From     | no-reply@access-accsecurity[.]com|
 |Reply-To                |solutionteamrecognizd03@gmail.com|
-| To| |phishing@pot
+| To|        phishing@pot|
 |       Date Received                   | 12:15 am, Aug 16th, 2023|
 
+
+# IP Address Analysis and Mail Flow
+# a. Originating IP Address
+●IP: 89[.]144[.]44[.]41 (atujpdfghher.co[.]uk)
+●Geo-Location: Bad Homburg, Germany
+●Does this match the sender's domain? It does not match the “sender “domain access-accsecurity[.]com or any Microsoft infrastructure.
+
+Domain lookup was performed to gain additional information about the originating IP address
  
-  
+![image](https://github.com/user-attachments/assets/44fbd720-b1cf-479f-bbc6-a44b1e293726)
+
+ *whois lookup by VirusTotal*
+
+# Received Header Chain:
+Below is the list of all servers (received headers) in order from origin to destination:
  
- 
- 
- 
- 
+ ![image](https://github.com/user-attachments/assets/c82f02ca-c3c4-446c-bc5d-8f140651d3cf)
+
+*Image by Phishtool*
+
+Total hops = 4
+Any anomalies? The message originated from a suspicious IP address in Germany and lacked SPF authorization. Additionally, the hostnames were spoofed or forged to resemble Outlook servers.
  
