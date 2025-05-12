@@ -159,16 +159,22 @@ What is this?
 This is a *1x1 invisible image*, commonly known as a: Tracking Pixel (aka web beacon or spy pixel).
 The purpose of these tracking pixels is typically used in marketing emails, phishing attempts, or malicious campaigns to:
 ● Detect when and if an email was opened
+
 ● Log the recipient’s IP address
+
 ● Capture User-Agent / browser info
+
 ● Track recipient location (rough geolocation via IP)
+
 ● Fingerprint the user for further tracking  
 
 # Dissecting the Code:
 # hxxp[://]thebandalisty[.]com/track/o41799GCMXp22448528DkRM49413Hwr34421lnRD176
 This URL is the endpoint being hit when the email is opened. When your email client loads images (automatically or manually), it contacts that server, logging your interaction.
+
 # width="1px" height="1px"
 Makes it tiny and unnoticeable
+
 # style="visibility:hidden"
 Ensures it’s not visible even if the dimensions weren’t enough
 
@@ -191,12 +197,18 @@ Moreover, all major email authentication checks have failed or are missing. SPF 
 Additionally, the originating IP address (89[.]144[.]44[.]41) traces back to a provider known for hosting suspicious or abusive content, and it is geolocated to Germany, which is inconsistent with Microsoft's global mail routing infrastructure. There is also a hidden tracking pixel hosted on a suspicious third-party domain (thebandalisty[.]com), commonly used in phishing to monitor user interaction with the email. Taken together, the spoofed brand appearance, authentication failures, mismatched domains, and obfuscated tracking behavior confirm this is a malicious phishing email attempting to socially engineer the recipient into replying or engaging with a fraudulent support address.
 
 # Recommended Improvements:
-● Block the sender domain (access-accsecurity[.]com) at the email gateway: This domain is not affiliated with Microsoft and was used to spoof the brand. Blocking this domain at the perimeter (Exchange Online Protection, Proofpoint, Mimecast, etc.) will prevent further emails from this sender from reaching user inboxes
+● Block the sender domain (access-accsecurity[.]com) at the email gateway: This domain is not affiliated with Microsoft and was used to spoof the brand. Blocking this domain at the perimeter (Exchange Online Protection, Proofpoint, Mimecast, etc.) will prevent further emails from this sender from reaching user inboxes.
+
 ● Blacklist the originating IP address (89[.]144[.]44[.]41): This IP address belongs to a hosting provider (HostSailor) with a known history of abuse-related activity. Blacklisting this IP prevents future attempts from the same infrastructure and may help reduce similar attack vectors.
+.
 ● Monitor for related campaigns or IOC matches (domains, IPs, headers): Use threat intel feeds or your SIEM to watch for similar Reply-To patterns, sender domains, or tracking pixel URLs (thebandalisty.com). Monitor for any other messages from the same ASN or IP block used in this campaign.
+
 ● Quarantine or auto-delete unauthenticated Microsoft-branded messages: Set conditional mail flow rules (Transport Rules / Mail Flow Rules) that quarantine or flag any message claiming to be from Microsoft.com or Outlook.com domains if they fail SPF, DKIM, or DMARC. This adds a defensive layer without outright blocking potentially legitimate external senders.
+
 ● Add detection rules for tracking pixels and beaconing links: Use a secure email gateway or a DLP/content filter to identify invisible <img> tags linked to remote third-party URLs. These are often used for tracking engagement or setting up further social engineering.
+
 ● Consider integrating a sandbox/detonation environment: If not already deployed, use a sandbox to detonate suspicious attachments or follow suspicious links. While this email was HTML-based and had no attachments, future variants may include weaponized files or redirect chains.
+
 ● Notify internal users and conduct phishing awareness reinforcement: Since the email mimics Microsoft account alerts, users may be susceptible to social engineering tactics. Circulating a short internal advisory with red flags from this case (e.g., Gmail reply address, unverified sender, Russia login bait) helps strengthen user awareness and reduce click risk.
 
 
