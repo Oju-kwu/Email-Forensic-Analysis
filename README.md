@@ -93,4 +93,12 @@ Below is the list of all servers (received headers) in order from origin to dest
 
 Total hops = 4
 Any anomalies? The message originated from a suspicious IP address in Germany and lacked SPF authorization. Additionally, the hostnames were spoofed or forged to resemble Outlook servers.
- 
+
+# Authentication Results
+Email authentication results are important because they verify the legitimacy and integrity of email messages, enhancing security and improving deliverability. They help prevent phishing attacks, email spoofing, and spam, ensuring that legitimate emails reach the intended recipients and protecting both senders and recipients from malicious activity.
+
+|      Secy               | Status       | Explanation|
+|---------------------------|----------------------------|------------------|
+|   SPF   |Fail    |  atujpdfghher.co.uk has no SPF record, so the sender can't be verified|
+|DKIM  |Fail |  The lack of a signature in the message implies the absence of DKIM protection.|
+|DMARC  | Permerror| This indicates a misconfigured or absent DMARC record, allowing spoofing.|
