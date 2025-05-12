@@ -97,8 +97,27 @@ Any anomalies? The message originated from a suspicious IP address in Germany an
 # Authentication Results
 Email authentication results are important because they verify the legitimacy and integrity of email messages, enhancing security and improving deliverability. They help prevent phishing attacks, email spoofing, and spam, ensuring that legitimate emails reach the intended recipients and protecting both senders and recipients from malicious activity.
 
-|      Secy               | Status       | Explanation|
+|      Security              | Status       | Explanation|
 |---------------------------|----------------------------|------------------|
 |   SPF   |Fail    |  atujpdfghher.co.uk has no SPF record, so the sender can't be verified|
 |DKIM  |Fail |  The lack of a signature in the message implies the absence of DKIM protection.|
 |DMARC  | Permerror| This indicates a misconfigured or absent DMARC record, allowing spoofing.|
+
+# SPF (Sender Policy Framework)
+SPF is an email authentication method that verifies if an email was sent from an authorized mail server. It checks if the sender's IP address is listed in the domain's SPF record. SPF helps prevent email spoofing by making it harder for spammers to send messages on behalf of your domain.
+
+# DKIM (DomainKeys Identified Mail)
+DKIM adds a digital signature to emails, which can be verified by the recipient's email server. This signature confirms that the email was sent by the domain owner and hasn't been altered during transit. DKIM ensures email integrity and authenticity.
+
+# DMARC (Domain-based Message Authentication, Reporting & Conformance)
+DMARC builds on SPF and DKIM. It tells the receiving email server what to do with messages that fail SPF and DKIM checks (e.g., quarantine or reject). DMARC also provides a reporting mechanism so domain owners can see who is sending emails on their behalf. DMARC helps protect against phishing and email spoofing by providing clear instructions on how to handle unauthenticated emails.
+
+![image](https://github.com/user-attachments/assets/bbfadc0b-8d9d-44ab-b4a8-5d62c3182222)
+
+*SPF, DKIM, DMARC checks (by phishtool)*
+
+# Exchange Authentication Headers
+|      Header              | Value       | Interpretation|
+|---------------------------|----------------------------|------------------|
+|   X-MS-Exchange-Organization-AuthAs |  Anonymous |  Message was unauthenticated on arrival|
+| X-MS-Exchange-Organization-AuthSource | MW2NAM04FT048.eop-NAM04.prod.protection.outlook.com|  The message appeared to arrive via Outlook infrastructure, likely forged or relayed.|
