@@ -173,3 +173,36 @@ Makes it tiny and unnoticeable
 Ensures it’s not visible even if the dimensions weren’t enough
 
 The URL was subsequently searched on VirusTotal to gain further insight. The results, as shown below, indicate that four vendors have flagged the URL as malicious.
+![image](https://github.com/user-attachments/assets/f13a780c-1885-4862-887f-d6d847be64cd)
+
+ *VirusTotal flag*
+
+![image](https://github.com/user-attachments/assets/b132b249-5cbb-48a3-a296-810aa546821f)
+
+# Domain
+Analysis also revealed an embedded domain in the email, which is sign.in.
+Clicking the link directs the user to a fake login page, designed to steal their credentials.
+
+# Overall Assessment
+This email is a clear and deliberate phishing attempt designed to impersonate Microsoft’s account security alerts. The subject line, “Microsoft account unusual sign-in activity,” and the HTML-styled body of the email mimic legitimate Microsoft notifications. However, upon examining the email headers, it becomes evident that the message did not originate from Microsoft infrastructure. The sender domain access-accsecurity.com is not associated with Microsoft, and the Reply-To address points to a free Gmail account (solutionteamrecognizd03@gmail.com), which is highly uncharacteristic for corporate security communications.
+
+Moreover, all major email authentication checks have failed or are missing. SPF returned ‘None’, DKIM is absent, and DMARC resulted in a permanent error, which means the domain is either misconfigured or lacks enforcement. These failures indicate the sender’s domain cannot be trusted and is susceptible to spoofing. The X-MS-Exchange-Organization-AuthAs: Anonymous header confirms that the message was not authenticated when it entered the recipient’s environment, further reinforcing that this message likely originated from outside the organization without verification.
+
+Additionally, the originating IP address (89[.]144[.]44[.]41) traces back to a provider known for hosting suspicious or abusive content, and it is geolocated to Germany, which is inconsistent with Microsoft's global mail routing infrastructure. There is also a hidden tracking pixel hosted on a suspicious third-party domain (thebandalisty[.]com), commonly used in phishing to monitor user interaction with the email. Taken together, the spoofed brand appearance, authentication failures, mismatched domains, and obfuscated tracking behavior confirm this is a malicious phishing email attempting to socially engineer the recipient into replying or engaging with a fraudulent support address.
+
+# Recommended Improvements:
+● Block the sender domain (access-accsecurity[.]com) at the email gateway: This domain is not affiliated with Microsoft and was used to spoof the brand. Blocking this domain at the perimeter (Exchange Online Protection, Proofpoint, Mimecast, etc.) will prevent further emails from this sender from reaching user inboxes
+● Blacklist the originating IP address (89[.]144[.]44[.]41): This IP address belongs to a hosting provider (HostSailor) with a known history of abuse-related activity. Blacklisting this IP prevents future attempts from the same infrastructure and may help reduce similar attack vectors.
+● Monitor for related campaigns or IOC matches (domains, IPs, headers): Use threat intel feeds or your SIEM to watch for similar Reply-To patterns, sender domains, or tracking pixel URLs (thebandalisty.com). Monitor for any other messages from the same ASN or IP block used in this campaign.
+● Quarantine or auto-delete unauthenticated Microsoft-branded messages: Set conditional mail flow rules (Transport Rules / Mail Flow Rules) that quarantine or flag any message claiming to be from Microsoft.com or Outlook.com domains if they fail SPF, DKIM, or DMARC. This adds a defensive layer without outright blocking potentially legitimate external senders.
+● Add detection rules for tracking pixels and beaconing links: Use a secure email gateway or a DLP/content filter to identify invisible <img> tags linked to remote third-party URLs. These are often used for tracking engagement or setting up further social engineering.
+● Consider integrating a sandbox/detonation environment: If not already deployed, use a sandbox to detonate suspicious attachments or follow suspicious links. While this email was HTML-based and had no attachments, future variants may include weaponized files or redirect chains.
+● Notify internal users and conduct phishing awareness reinforcement: Since the email mimics Microsoft account alerts, users may be susceptible to social engineering tactics. Circulating a short internal advisory with red flags from this case (e.g., Gmail reply address, unverified sender, Russia login bait) helps strengthen user awareness and reduce click risk.
+
+
+# Conclusion
+This email is a clear phishing attempt designed to impersonate Microsoft's account security alerts. Key indicators include the non-Microsoft sender domain (access-accsecurity.com), a Gmail Reply-To address, failed or missing email authentication (SPF, DKIM, DMARC), an anonymous authentication status within Exchange, a suspicious originating IP address from Germany, and a hidden tracking pixel from an unrelated domain. These findings confirm the email's malicious intent to socially engineer recipients and compromise their credentials. Immediate actions, such as blocking the sender domain and IP and enhancing email authentication checks, are recommended to mitigate risks and prevent future phishing attacks.
+
+
+ 
+
